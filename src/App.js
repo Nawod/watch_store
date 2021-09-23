@@ -1,36 +1,51 @@
+import React from 'react';
 import classes from './App.module.css';
-import ProductData from './ProductData';
+import ProductData from './ProductData/ProductData';
+import ProductDetails from './ProductDetails/ProductDetails';
+import ProductPreview from './ProductPreview/ProductPreview';
+import Topbar from './Topbar/topbar';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <nav className = {classes.Topbar}>
-          <img src="https://i.dlpng.com/static/png/6739216_preview.png" alt="Amazon Logo"/>
-        </nav> 
-      </header>
+class App extends React.Component{
+  state = {
+    productData: ProductData,
+    currentPreviewImagePos : 0,
+    showHeartBeat : 0,
+  }
 
-      <div className ={classes.Maincontainer}>
-        <div className= {classes.ProductPreview}>
-          <img src="https://imgur.com/iOeUBV7.png" alt="Product Preview"/>
-        </div>
-        <div className={classes.ProductData}>
-          <h1 className={classes.productTitle}>{ProductData.title}</h1>
-          <p className={classes.ProductDes}>{ProductData.description}</p>
+  onColorOptionClick = (pos) =>{
+    this.setState({
+      currentPreviewImagePos:pos
+    })
+  }
 
-          <h3 className={classes.sectionHeader}>Select Color</h3>
-          <div>
-          <img className={[classes.ProductImage , classes.SelectedProductImage].join(' ')} src={"https://imgur.com/iOeUBV7.png"} alt="Black Color Watch"/>
-            <img className={classes.ProductImage} src={"https://imgur.com/PTgQlim.png"} alt="Red Color Watch"/>
-            <img className={classes.ProductImage} src={"https://imgur.com/Mplj1YR.png"} alt="Blue Color Watch"/>
-            <img className={classes.ProductImage} src={"https://imgur.com/xSIK4M8.png"} alt="Purple Color Watch"/>
+  onFeatureClick = (pos) =>{
+    this.setState({
+      showHeartBeat:pos
+    })
+  }
+  
+  
+  render() {
+    return (
+      <div className="App">
+          <Topbar />
+  
+        <div className ={classes.Maincontainer}>
+          <div className= {classes.ProductPreview}>
+            <ProductPreview currentPreviewImageImage={this.state.productData.colorOptions[this.state.currentPreviewImagePos].imageUrl} 
+              showHeartBeat={this.state.showHeartBeat} />
           </div>
 
-          <h3 className={classes.sectionHeader}>Features</h3>
+          <div className={classes.ProductData}>
+            <ProductDetails data={this.state.productData} onColorOptionClick={this.onColorOptionClick}
+            currentPreviewImagePos={this.state.currentPreviewImagePos} onFeatureClick={this.onFeatureClick} 
+            showHeartBeat={this.state.showHeartBeat}/>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
 }
 
 export default App;
